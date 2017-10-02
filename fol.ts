@@ -1,10 +1,10 @@
 
 class Vertex {
-    text: String;
-    type: 'symbol' | 'variable';
-    lhs: Vertex;
-    rhs: Vertex;
-};
+    public text: string;
+    public type: 'symbol' | 'variable';
+    public lhs: Vertex;
+    public rhs: Vertex;
+}
 
 function equals(v1: Vertex, v2: Vertex): boolean {
 
@@ -23,7 +23,7 @@ function equals(v1: Vertex, v2: Vertex): boolean {
     }
 }
 
-function ruleMatches(rule: Vertex, expression: Vertex, variables: Object): boolean {
+function ruleMatches(rule: Vertex, expression: Vertex, variables: object): boolean {
 
     if (rule === null && expression === null) {
         return true;
@@ -44,7 +44,7 @@ function ruleMatches(rule: Vertex, expression: Vertex, variables: Object): boole
             return false;
         }
 
-        
+
     }
 
     return false;
