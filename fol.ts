@@ -23,7 +23,7 @@ function equals(v1: Vertex, v2: Vertex): boolean {
     }
 }
 
-function ruleMatches(rule: Vertex, expression: Vertex, variables: Map<String,Vertex>): boolean {
+function ruleMatches(rule: Vertex, expression: Vertex, variables: Object): boolean {
 
     if (rule === null && expression === null) {
         return true;
@@ -46,5 +46,7 @@ function ruleMatches(rule: Vertex, expression: Vertex, variables: Map<String,Ver
 
         
     }
+
+    return false;
 }
 
