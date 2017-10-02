@@ -1,0 +1,17 @@
+{
+  "name": "fol",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antony74/fol.git"
+  },
+  "author": "Antony74",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Antony74/fol/issues"
+  },
+  "dependencies": {
+    "jison": "^0.4.18"
+  }
+}
