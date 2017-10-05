@@ -1,4 +1,8 @@
 
+import './node_modules/@types/node/index.d.ts';
+
+const jison = require('./node_modules/jison/lib/jison.js');
+
 const arrRingAxioms: string[] = [
     'a + (b + c) = (a + b) + c',
     'a + 0 = a',

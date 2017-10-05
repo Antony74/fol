@@ -5,7 +5,9 @@
     ],
     "jsRules": {},
     "rules": {  
-        "no-consecutive-blank-lines": [false],
+        "no-consecutive-blank-lines": false,
+        "no-console": false,
+        "no-var-requires": false,
         "quotemark": [true, "single"],
         "trailing-comma": [true, "never"]
     },
