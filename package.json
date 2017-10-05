@@ -15,10 +15,11 @@
     "browserify": "^14.4.0",
     "http-server": "^0.10.0",
     "jison": "^0.4.18",
+    "tsify": "^3.0.3",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3"
   },
   "scripts": {
-    "start": "tsc && tslint fol.ts ui.ts --format verbose && browserify ui.js --outfile bundle.js --debug && http-server"
+    "start": "tsc && tslint fol.ts ui.ts --format verbose && browserify ui.ts --outfile bundle.js -p tsify --debug && http-server"
   }
 }
