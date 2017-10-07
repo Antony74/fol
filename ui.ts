@@ -1,7 +1,7 @@
 
 import * as bnf from 'ebnf-parser';
 import {Jison} from 'jison';
-import {equals, rulePartMatches, Vertex} from './fol';
+import {ruleMatches, Vertex} from './fol';
 
 const oReq = new XMLHttpRequest();
 oReq.addEventListener('load', ready);
@@ -14,15 +14,15 @@ function ready() {
     const parser = Jison.Generator(cfg, {type: 'lalr'}).createParser();
 
     const arrRingAxiomStrings: string[] = [
-        'a + (b + c) = (a + b) + c',        // Axiom 1
-        'a + 0 = a',                        // Axiom 2
-        'a + (-a) = 0',                     // Axiom 3
-        'a + b = b + a',                    // Axiom 4
-        'a * (b * c) = (a * b) * c',        // Axiom 5
-        'a * 1 = a',                        // Axiom 6
-        '1 * a = a',                        // Axiom 7
-        'a * (b + c) = (a * b) + (a * c)',  // Axiom 8
-        '(b + c) * a = (b * a) + (c * a)'   // Axiom 9
+        'x + (y + z) = (x + y) + z',        // Axiom 1
+        'x + 0 = x',                        // Axiom 2
+        'x + (-x) = 0',                     // Axiom 3
+        'x + y = y + x',                    // Axiom 4
+        'x * (y * z) = (x * y) * z',        // Axiom 5
+        'x * 1 = x',                        // Axiom 6
+        '1 * x = x',                        // Axiom 7
+        'x * (y + z) = (x * y) + (x * z)',  // Axiom 8
+        '(y + z) * x = (y * x) + (z * x)'   // Axiom 9
     ];
 
     // https://codegolf.stackexchange.com/a/143928/71303
@@ -64,10 +64,9 @@ function ready() {
     const step0: Vertex = arrProof[0];
     const step1: Vertex = arrProof[1];
 
-    console.log('step0 and step1 are equal? (expect false)', equals(step0, step1));
-    console.log('step0 and step1.lhs are equal? (expect true)', equals(step0, step1.lhs));
+    const result = ruleMatches(ax2.rhs, ax2.lhs, step0, step1, []);
 
-    const result = rulePartMatches(ax2.rhs, step0, []);
     console.log(result);
+
 }
 

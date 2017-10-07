@@ -11,7 +11,7 @@ export class RuleMatchResult {
     public variables: object;
 }
 
-export function equals(v1: Vertex, v2: Vertex): boolean {
+function equals(v1: Vertex, v2: Vertex): boolean {
 
     if (v1 === null && v2 === null) {
         return true;
@@ -28,7 +28,24 @@ export function equals(v1: Vertex, v2: Vertex): boolean {
     }
 }
 
-export function rulePartMatches(rulePart: Vertex, expression: Vertex, variables: object): RuleMatchResult {
+export function ruleMatches(
+                        ruleBefore: Vertex,
+                        ruleAfter: Vertex,
+                        exprBefore: Vertex,
+                        exprAfter: Vertex,
+                        variables: object): RuleMatchResult {
+
+    const result1 = rulePartMatches(ruleBefore, exprBefore, []);
+
+    if (result1.result) {
+        const result2 = rulePartMatches(ruleAfter, exprAfter, result1.variables);
+        return result2;
+    } else {
+        return result1;
+    }
+}
+
+function rulePartMatches(rulePart: Vertex, expression: Vertex, variables: object): RuleMatchResult {
 
     const result: RuleMatchResult = {
         result: false,
@@ -55,9 +72,19 @@ export function rulePartMatches(rulePart: Vertex, expression: Vertex, variables:
         return result;
     }
 
-    // TODO - There's more ways things can match.
-    // Err on the side of returning false and it should be obvious when this code needs filling in.
+    if (rulePart.type === expression.type && rulePart.text === expression.text) {
+        const lhResult: RuleMatchResult = rulePartMatches(rulePart.lhs, expression.lhs, result.variables);
 
+        if (lhResult.result) {
+            const rhResult: RuleMatchResult = rulePartMatches(rulePart.rhs, expression.rhs, lhResult.variables);
+            return rhResult;
+        }
+
+        result.result = false;
+        return result;
+    }
+
+    result.result = false;
     return result;
 }
 
