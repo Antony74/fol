@@ -6,7 +6,7 @@ export class Vertex {
     public rhs: Vertex;
 }
 
-function equals(v1: Vertex, v2: Vertex): boolean {
+export function equals(v1: Vertex, v2: Vertex): boolean {
 
     if (v1 === null && v2 === null) {
         return true;
@@ -23,7 +23,7 @@ function equals(v1: Vertex, v2: Vertex): boolean {
     }
 }
 
-function ruleMatches(rule: Vertex, expression: Vertex, variables: object): boolean {
+export function ruleMatches(rule: Vertex, expression: Vertex, variables: object): boolean {
 
     if (rule === null && expression === null) {
         return true;
