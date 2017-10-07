@@ -9,7 +9,14 @@ export class Vertex {
 export class RuleMatchResult {
     public result: boolean;
     public variables: object;
+    public context: string;
 }
+
+const resultFalse = {
+    result: false,
+    variables: [],
+    context: ''
+};
 
 function equals(v1: Vertex, v2: Vertex): boolean {
 
@@ -49,7 +56,8 @@ function rulePartMatches(rulePart: Vertex, expression: Vertex, variables: object
 
     const result: RuleMatchResult = {
         result: false,
-        variables: Object.assign({}, variables)
+        variables: Object.assign({}, variables),
+        context: ''
     };
 
     if (rulePart === null && expression === null) {
@@ -86,5 +94,131 @@ function rulePartMatches(rulePart: Vertex, expression: Vertex, variables: object
 
     result.result = false;
     return result;
+}
+
+export function searchForRuleMatches(
+    ruleBefore: Vertex,
+    ruleAfter: Vertex,
+    exprBefore: Vertex,
+    exprAfter: Vertex,
+    variables: object): RuleMatchResult {
+
+    const result = ruleMatches(ruleBefore, ruleAfter, exprBefore, exprAfter, variables);
+
+    if (result.result) {
+        return result;
+    }
+
+    if (exprBefore.lhs && exprAfter.lhs) {
+        const lhResult = searchForRuleMatches(ruleBefore, ruleAfter, exprBefore.lhs, exprAfter.lhs, variables);
+
+        if (lhResult.result) {
+            lhResult.context = 'l' + lhResult.context;
+            return lhResult;
+        }
+    }
+
+    if (exprBefore.rhs && exprAfter.rhs) {
+        const rhResult = searchForRuleMatches(ruleBefore, ruleAfter, exprBefore.rhs, exprAfter.rhs, variables);
+
+        if (rhResult.result) {
+            rhResult.context = 'r' + rhResult.context;
+            return rhResult;
+        }
+    }
+
+    return resultFalse;
+}
+
+export function vertexAsString(vertex: Vertex, brackets: boolean): string {
+
+    if (vertex.lhs === null && vertex.rhs === null) {
+        brackets = false;
+    }
+
+    const arr: string[] = [];
+
+    if (brackets) {
+        arr.push('(');
+    }
+
+    if (vertex.lhs) {
+        arr.push(vertexAsString(vertex.lhs, true));
+    }
+
+    arr.push(vertex.text);
+
+    if (vertex.rhs) {
+        arr.push(vertexAsString(vertex.rhs, true));
+    }
+
+    if (brackets) {
+        arr.push(')');
+    }
+
+    return arr.join(' ');
+}
+
+export function variablesAsString(variables: object): string {
+    return Object.keys(variables).map((key) => {
+        return key + ' = ' + vertexAsString(variables[key], false);
+    }).join(', ');
+}
+
+export function searchAcrossRulesForMatches(
+    rulesBefore: Vertex[],
+    rulesAfter: Vertex[],
+    exprBefore: Vertex,
+    exprAfter: Vertex): RuleMatchResult {
+
+    if (rulesBefore.length !== rulesAfter.length) {
+        console.log('Rule lengths are different');
+        return resultFalse;
+    }
+
+    for (let n = 0; n < rulesBefore.length; ++n) {
+
+        const result = searchForRuleMatches(rulesBefore[n], rulesAfter[n], exprBefore, exprAfter, []);
+
+        if (result.result) {
+
+            if (result.context.length === 0) {
+                result.context = 'root';
+            }
+
+            result.context = 'axiom ' + (n + 1) + ', ' + result.context + ', ' + variablesAsString(result.variables);
+            return result;
+        }
+    }
+
+    return resultFalse;
+}
+
+export function bidirectionalSearchAcrossRulesForMatches(
+    rulesLhs: Vertex[],
+    rulesRhs: Vertex[],
+    exprBefore: Vertex,
+    exprAfter: Vertex): RuleMatchResult {
+
+    if (rulesLhs.length !== rulesRhs.length) {
+        console.log('Rule lengths are different');
+        return resultFalse;
+    }
+
+    const result1 = searchAcrossRulesForMatches(rulesLhs, rulesRhs, exprBefore, exprAfter);
+
+    if (result1.result) {
+        result1.context = 'Left to right ' + result1.context;
+        return result1;
+    }
+
+    const result2 = searchAcrossRulesForMatches(rulesRhs, rulesLhs, exprBefore, exprAfter);
+
+    if (result2.result) {
+        result2.context = 'Right to left ' + result2.context;
+        return result2;
+    }
+
+    return resultFalse;
 }
 

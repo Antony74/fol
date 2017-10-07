@@ -1,7 +1,7 @@
 
 import * as bnf from 'ebnf-parser';
 import {Jison} from 'jison';
-import {ruleMatches, Vertex} from './fol';
+import {bidirectionalSearchAcrossRulesForMatches, Vertex} from './fol';
 
 const oReq = new XMLHttpRequest();
 oReq.addEventListener('load', ready);
@@ -53,20 +53,19 @@ function ready() {
         return vertex;
     });
 
+    const arrRingAxiomsLeft = arrRingAxioms.map((ax) => ax.lhs);
+    const arrRingAxiomsRight = arrRingAxioms.map((ax) => ax.rhs);
+
     const arrProof = arrProofStrings.map((sProofStep: string): Vertex => {
         const vertex = parser.parse(sProofStep);
         return vertex;
     });
 
-    const ax1: Vertex = arrRingAxioms[0];
-    const ax2: Vertex = arrRingAxioms[1];
-
     const step0: Vertex = arrProof[0];
     const step1: Vertex = arrProof[1];
 
-    const result = ruleMatches(ax2.rhs, ax2.lhs, step0, step1, []);
+    const result = bidirectionalSearchAcrossRulesForMatches(arrRingAxiomsLeft, arrRingAxiomsRight, step0, step1);
 
     console.log(result);
-
 }
 

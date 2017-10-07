@@ -9,7 +9,9 @@
         "no-consecutive-blank-lines": false,
         "no-console": false,
         "no-var-requires": false,
+        "object-literal-sort-keys": false,
         "object-literal-shorthand": false,
+        "prefer-for-of": false,
         "quotemark": [true, "single"],
         "trailing-comma": [true, "never"]
     },
