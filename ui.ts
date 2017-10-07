@@ -1,6 +1,7 @@
 
 import * as bnf from 'ebnf-parser';
 import {Jison} from 'jison';
+import {Vertex} from './fol';
 
 const oReq = new XMLHttpRequest();
 oReq.addEventListener('load', ready);
@@ -12,7 +13,7 @@ function ready() {
     const cfg = bnf.parse(grammar);
     const parser = Jison.Generator(cfg, {type: 'lalr'}).createParser();
 
-    const arrRingAxioms: string[] = [
+    const arrRingAxiomStrings: string[] = [
         'a + (b + c) = (a + b) + c',
         'a + 0 = a',
         'a + (-a) = 0',
@@ -24,10 +25,12 @@ function ready() {
         '(b + c) * a = (b * a) + (c * a)'
     ];
 
-    for (let n = 0; n < 1; ++n) {
-        console.log(arrRingAxioms[n]);
-        const vertex = parser.parse(arrRingAxioms[n]);
+    const arrRingAxioms = arrRingAxiomStrings.map((sAxiom: string): Vertex => {
+        console.log(sAxiom);
+        const vertex = parser.parse(sAxiom);
         console.log(vertex);
-    }
+        return vertex;
+    });
+
 }
 

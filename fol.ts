@@ -1,7 +1,7 @@
 
-class Vertex {
+export class Vertex {
     public text: string;
-    public type: 'symbol' | 'var' | 'value';
+    public type: 'symbol' | 'var' | 'const';
     public lhs: Vertex;
     public rhs: Vertex;
 }

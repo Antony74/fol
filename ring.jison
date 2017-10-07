@@ -48,8 +48,8 @@ e
         {$$ = $2;}
     | VAR
         {$$ = {text: $1, type: 'var', lhs: null, rhs: null};}
-    | E
-        {$$ = {symbol:'E', value:Math.E};}
-    | PI
-        {$$ = {symbol:'PI', value:Math.PI};}
+    | ZERO
+        {$$ = {text: '0', type: 'const', lhs: null, rhs: null};}
+    | ONE
+        {$$ = {text: '1', type: 'const', lhs: null, rhs: null};}
     ;
