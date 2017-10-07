@@ -1,7 +1,7 @@
 
 class Vertex {
     public text: string;
-    public type: 'symbol' | 'variable';
+    public type: 'symbol' | 'var' | 'value';
     public lhs: Vertex;
     public rhs: Vertex;
 }

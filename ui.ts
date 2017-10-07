@@ -17,14 +17,17 @@ function ready() {
         'a + 0 = a',
         'a + (-a) = 0',
         'a + b = b + a',
-        'a × (b × c) = (a × b) × c',
-        'a × 1 = a',
-        '1 × a = a',
-        'a × (b + c) = (a × b) + (a × c)',
-        '(b + c) × a = (b × a) + (c × a)'
+        'a * (b * c) = (a * b) * c',
+        'a * 1 = a',
+        '1 * a = a',
+        'a * (b + c) = (a * b) + (a * c)',
+        '(b + c) * a = (b * a) + (c * a)'
     ];
 
-    const a0 = parser.parse(arrRingAxioms[0]);
-    console.log(a0);
+    for (let n = 0; n < 1; ++n) {
+        console.log(arrRingAxioms[n]);
+        const vertex = parser.parse(arrRingAxioms[n]);
+        console.log(vertex);
+    }
 }
 

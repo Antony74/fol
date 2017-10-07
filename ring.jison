@@ -34,26 +34,20 @@ expressions
     : e EOF
         {return $1;}
     | e '=' e EOF
-        {return $1;}
+        {return {text:'=', type:'symbol',  lhs: $1, rhs: $3};}
     ;
 
 e
     : e '+' e
-		{$$ = {symbol:'PLUS', value: $1.value + $3.value, children:[$1, {symbol:'+'}, $3]};}
-    | e '-' e
-		{$$ = {symbol:'SUB',  value: $1.value - $3.value, children:[$1, {symbol:'-'}, $3]};}
+		{$$ = {text:'+', type:'symbol', lhs: $1, rhs: $3};}
     | e '*' e
-		{$$ = {symbol:'MULT', value: $1.value * $3.value, children:[$1, {symbol:'*'}, $3]};}
-    | e '/' e
-		{$$ = {symbol:'DIV',  value: $1.value / $3.value, children:[$1, {symbol:'/'}, $3]};}
-    | e '^' e
-		{$$ = {symbol:'POW', value: Math.pow($1.value, $3.value), children:[$1, {symbol:'^'}, $3]};}
+		{$$ = {text:'*', type:'symbol', lhs: $1, rhs: $3};}
     | '-' e %prec UMINUS
-		{$$ = {symbol:'NEG', value: -$2.value, children:[{symbol:'-'}, $2]};}
+		{$$ = {text:'-', type:'symbol', lhs: null, rhs: $2};}
     | '(' e ')'
-        {$$ = {symbol:'BRACKET', value: $2.value, children:[{symbol:'('}, $2, {symbol:')'}]};}
+        {$$ = $2;}
     | VAR
-        {$$ = {symbol:'VAR', value:Number(yytext)};}
+        {$$ = {text: $1, type: 'var', lhs: null, rhs: null};}
     | E
         {$$ = {symbol:'E', value:Math.E};}
     | PI
