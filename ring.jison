@@ -5,16 +5,15 @@
 %%
 
 \s+                   /* skip whitespace */
-[0-9]+("."[0-9]+)?\b  return 'NUMBER'
+[a-z]+                return 'VAR'
+"="                   return '='
 "*"                   return '*'
-"/"                   return '/'
 "-"                   return '-'
 "+"                   return '+'
-"^"                   return '^'
 "("                   return '('
 ")"                   return ')'
-"PI"                  return 'PI'
-"E"                   return 'E'
+"1"                   return 'ONE'
+"0"                   return 'ZERO'
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 
@@ -34,6 +33,8 @@
 expressions
     : e EOF
         {return $1;}
+    | e '=' e EOF
+        {return $1;}
     ;
 
 e
@@ -51,8 +52,8 @@ e
 		{$$ = {symbol:'NEG', value: -$2.value, children:[{symbol:'-'}, $2]};}
     | '(' e ')'
         {$$ = {symbol:'BRACKET', value: $2.value, children:[{symbol:'('}, $2, {symbol:')'}]};}
-    | NUMBER
-        {$$ = {symbol:'NUMBER', value:Number(yytext)};}
+    | VAR
+        {$$ = {symbol:'VAR', value:Number(yytext)};}
     | E
         {$$ = {symbol:'E', value:Math.E};}
     | PI

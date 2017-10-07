@@ -24,7 +24,7 @@ function ready() {
         '(b + c) × a = (b × a) + (c × a)'
     ];
 
-    parser.parse(arrRingAxioms[0]);
-
+    const a0 = parser.parse(arrRingAxioms[0]);
+    console.log(a0);
 }
 
