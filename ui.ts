@@ -61,11 +61,17 @@ function ready() {
         return vertex;
     });
 
-    const step0: Vertex = arrProof[0];
-    const step1: Vertex = arrProof[1];
+    for (let n = 1; n < arrProof.length; ++n) {
 
-    const result = bidirectionalSearchAcrossRulesForMatches(arrRingAxiomsLeft, arrRingAxiomsRight, step0, step1);
+        const exprBefore = arrProof[n - 1];
+        const exprAfter = arrProof[n];
+        const result = bidirectionalSearchAcrossRulesForMatches(
+                            arrRingAxiomsLeft,
+                            arrRingAxiomsRight,
+                            exprBefore,
+                            exprAfter);
 
-    console.log(result);
+        console.log(result);
+    }
 }
 
