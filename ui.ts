@@ -1,7 +1,7 @@
 
 import * as bnf from 'ebnf-parser';
 import {Jison} from 'jison';
-import {equals, ruleMatches, Vertex} from './fol';
+import {equals, rulePartMatches, Vertex} from './fol';
 
 const oReq = new XMLHttpRequest();
 oReq.addEventListener('load', ready);
@@ -58,10 +58,16 @@ function ready() {
         return vertex;
     });
 
+    const ax1: Vertex = arrRingAxioms[0];
+    const ax2: Vertex = arrRingAxioms[1];
+
     const step0: Vertex = arrProof[0];
     const step1: Vertex = arrProof[1];
 
     console.log('step0 and step1 are equal? (expect false)', equals(step0, step1));
     console.log('step0 and step1.lhs are equal? (expect true)', equals(step0, step1.lhs));
+
+    const result = rulePartMatches(ax2.rhs, step0, []);
+    console.log(result);
 }
 
