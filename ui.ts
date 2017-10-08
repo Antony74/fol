@@ -35,7 +35,7 @@ function ready() {
     document.getElementById('axioms').innerHTML = '<table>' + rows + '</table>';
 
     // https://codegolf.stackexchange.com/a/143928/71303
-    const arrProofStrings: string[] = [
+    let arrProofStrings: string[] = [
         '(-a)*(-a)',
         '((-a)*(-a))+0',                                            // Axiom 2
         '((-a)*(-a))+(((a*a)+(a*(-a)))+(-((a*a)+(a*(-a)))))',       // Axiom 3
@@ -67,22 +67,39 @@ function ready() {
     const arrRingAxiomsLeft = arrRingAxioms.map((ax) => ax.lhs);
     const arrRingAxiomsRight = arrRingAxioms.map((ax) => ax.rhs);
 
-    const arrProof = arrProofStrings.map((sProofStep: string): Vertex => {
-        const vertex = parser.parse(sProofStep);
-        return vertex;
-    });
+    document.getElementById('validate').onclick = (event: MouseEvent) => {
+        event.preventDefault();
 
-    for (let n = 1; n < arrProof.length; ++n) {
+        arrProofStrings = document.getElementById('proof').textContent.split('\n');
 
-        const exprBefore = arrProof[n - 1];
-        const exprAfter = arrProof[n];
-        const result = bidirectionalSearchAcrossRulesForMatches(
-                            arrRingAxiomsLeft,
-                            arrRingAxiomsRight,
-                            exprBefore,
-                            exprAfter);
+        const arrProof = arrProofStrings.map((sProofStep: string): Vertex => {
+            const vertex = parser.parse(sProofStep);
+            return vertex;
+        });
 
-        console.log(result);
-    }
+        let table = '<table>';
+
+        for (let n = 1; n < arrProof.length; ++n) {
+
+            table += '<tr>';
+            table += '<td>';
+            const exprBefore = arrProof[n - 1];
+            const exprAfter = arrProof[n];
+            const result = bidirectionalSearchAcrossRulesForMatches(
+                                arrRingAxiomsLeft,
+                                arrRingAxiomsRight,
+                                exprBefore,
+                                exprAfter);
+
+            table += JSON.stringify(result);
+            table += '</td>';
+            table += '</tr>';
+        }
+
+        table += '</table>';
+
+        document.getElementById('validation').innerHTML = table;
+    };
+
 }
 

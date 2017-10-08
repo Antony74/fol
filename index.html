@@ -21,8 +21,19 @@
                 padding-right: 10px;
             }
 
+            #proofFixed {
+                width: 66%;
+                height: 90vh;
+                overflow: hidden;
+            }
+
+            #proofScroll {
+                height: 100%;
+                overflow: auto;
+            }
+
             #proof {
-                width: 500px;
+                width: 90%;
                 height: 350px;
             }
 
@@ -34,14 +45,20 @@
         <div id='axioms' class="roundBorder">
         </div>
 
-        <div class="roundBorder">
-            Proof:
-            <form>
-                <textarea id='proof'>
-                </textarea>
-                <br>
-                <button id="validate">Validate</button>
-            </form>
+        <div class="roundBorder" id="proofFixed">
+            <div id='proofScroll'>
+                Proof:
+                <form>
+                    <textarea id='proof'>
+                    </textarea>
+                    <br>
+                    <button id="validate">Validate</button>
+                </form>
+
+                <div id="validation">
+
+                </div>
+            </div>
         </div>
                     
     </body>
