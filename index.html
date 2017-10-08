@@ -3,8 +3,46 @@
     <head>
         <title>fol</title>
         <script src="bundle.js"></script>
+
+        <style>
+
+            .roundBorder {
+                border: solid 1px;
+                border-radius: 5px;
+                margin: 5px;
+                padding: 10px;
+                display: inline-block;
+                font: bold normal 15px / 19.5px Arial;
+                vertical-align: top;
+            }
+
+            td {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            #proof {
+                width: 500px;
+                height: 350px;
+            }
+
+        </style>
+
     </head>
     <body>
 
+        <div id='axioms' class="roundBorder">
+        </div>
+
+        <div class="roundBorder">
+            Proof:
+            <form>
+                <textarea id='proof'>
+                </textarea>
+                <br>
+                <button id="validate">Validate</button>
+            </form>
+        </div>
+                    
     </body>
 </html>

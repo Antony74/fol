@@ -25,6 +25,15 @@ function ready() {
         '(y + z) * x = (y * x) + (z * x)'   // Axiom 9
     ];
 
+    const rows: string = arrRingAxiomStrings.map((sAxiom: string, index: number) => {
+        return '<tr>'
+        +      '   <td>Axiom ' + (index + 1) + '</td>'
+        +      '   <td>' + sAxiom + '</td>'
+        +      '</tr>';
+    }).join('\n');
+
+    document.getElementById('axioms').innerHTML = '<table>' + rows + '</table>';
+
     // https://codegolf.stackexchange.com/a/143928/71303
     const arrProofStrings: string[] = [
         '(-a)*(-a)',
@@ -47,6 +56,8 @@ function ready() {
         '(a*a)+0',                                                  // Axiom 3
         'a*a'                                                       // Axiom 2
     ];
+
+    document.getElementById('proof').innerHTML = arrProofStrings.join('\n');
 
     const arrRingAxioms = arrRingAxiomStrings.map((sAxiom: string): Vertex => {
         const vertex = parser.parse(sAxiom);
