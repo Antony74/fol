@@ -70,7 +70,9 @@ function ready() {
     document.getElementById('validate').onclick = (event: MouseEvent) => {
         event.preventDefault();
 
-        arrProofStrings = document.getElementById('proof').textContent.split('\n');
+        const textArea: HTMLTextAreaElement = document.getElementById('proof') as HTMLTextAreaElement;
+
+        arrProofStrings = textArea.value.split('\n');
 
         const arrProof = arrProofStrings.map((sProofStep: string): Vertex => {
             const vertex = parser.parse(sProofStep);
@@ -78,11 +80,20 @@ function ready() {
         });
 
         let table = '<table>';
+        let fullResult = true;
 
         for (let n = 1; n < arrProof.length; ++n) {
 
             table += '<tr>';
-            table += '<td>';
+
+            if (n === 1) {
+                table += '<td>' + arrProofStrings[0] + '</td>';
+            } else {
+                table += '<td>&nbsp</td>';
+            }
+
+            table += '<td> = ' + arrProofStrings[n] + '</td>';
+
             const exprBefore = arrProof[n - 1];
             const exprAfter = arrProof[n];
             const result = bidirectionalSearchAcrossRulesForMatches(
@@ -91,12 +102,32 @@ function ready() {
                                 exprBefore,
                                 exprAfter);
 
-            table += JSON.stringify(result);
-            table += '</td>';
+            if (result.result) {
+                table += '<td class="greenCell">&#10004;</td>';
+            } else {
+                table += '<td class="redCell">X</td>';
+                fullResult = false;
+            }
+
+            const arrContext = result.context.split(',');
+            while (arrContext.length < 8) {
+                arrContext.push('&nbsp');
+            }
+
+            table += arrContext.map((s) => '<td>' + s + '</td>').join('');
+
             table += '</tr>';
         }
 
         table += '</table>';
+
+        if (fullResult) {
+            table = '<p><div class="greenCell">&#10004; proved in ' + (arrProof.length - 1)
+                  + ' steps</div></p>' + table;
+        } else {
+            table = '<p><div class="redCell">X unable to validate proof (' + (arrProof.length - 1)
+                  + ' steps)</div></p>' + table;
+        }
 
         document.getElementById('validation').innerHTML = table;
     };
