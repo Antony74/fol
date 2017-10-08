@@ -18,7 +18,7 @@ const resultFalse = {
     context: ''
 };
 
-function equals(v1: Vertex, v2: Vertex): boolean {
+function shallowEquals(v1: Vertex, v2: Vertex): boolean {
 
     if (v1 === null && v2 === null) {
         return true;
@@ -26,9 +26,19 @@ function equals(v1: Vertex, v2: Vertex): boolean {
         return false;
     } else if (v1.text !== v2.text || v1.type !== v2.type) {
         return false;
-    } else if (!equals(v1.lhs, v2.lhs)) {
+    } else {
+        return true;
+    }
+
+}
+
+function deepEquals(v1: Vertex, v2: Vertex): boolean {
+
+    if (!shallowEquals(v1, v2)) {
         return false;
-    } else if (!equals(v1.rhs, v2.rhs)) {
+    } else if (v1.lhs && !deepEquals(v1.lhs, v2.lhs)) {
+        return false;
+    } else if (v1.rhs && !deepEquals(v1.rhs, v2.rhs)) {
         return false;
     } else {
         return true;
@@ -71,7 +81,7 @@ function rulePartMatches(rulePart: Vertex, expression: Vertex, variables: object
     if (rulePart.type === 'var') {
         const varName = rulePart.text;
         if (variables[varName]) {
-            result.result = equals(expression, variables[varName]);
+            result.result = deepEquals(expression, variables[varName]);
         } else {
             result.result = true;
             result.variables[varName] = expression;
@@ -113,8 +123,11 @@ export function searchForRuleMatches(
         const lhResult = searchForRuleMatches(ruleBefore, ruleAfter, exprBefore.lhs, exprAfter.lhs, variables);
 
         if (lhResult.result) {
-            lhResult.context = 'l' + lhResult.context;
-            return lhResult;
+
+            if (shallowEquals(exprBefore, exprAfter) && deepEquals(exprBefore.rhs, exprAfter.rhs)) {
+                lhResult.context = 'l' + lhResult.context;
+                return lhResult;
+            }
         }
     }
 
@@ -122,8 +135,11 @@ export function searchForRuleMatches(
         const rhResult = searchForRuleMatches(ruleBefore, ruleAfter, exprBefore.rhs, exprAfter.rhs, variables);
 
         if (rhResult.result) {
-            rhResult.context = 'r' + rhResult.context;
-            return rhResult;
+
+            if (shallowEquals(exprBefore, exprAfter) && deepEquals(exprBefore.lhs, exprAfter.lhs)) {
+                rhResult.context = 'r' + rhResult.context;
+                return rhResult;
+            }
         }
     }
 
