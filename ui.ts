@@ -8,6 +8,13 @@ oReq.addEventListener('load', ready);
 oReq.open('GET', 'ring.jison');
 oReq.send();
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+function fixedEncodeURIComponent(str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+      return '%' + c.charCodeAt(0).toString(16);
+    });
+  }
+
 function ready() {
     const grammar = this.responseText;
     const cfg = bnf.parse(grammar);
@@ -126,7 +133,7 @@ function ready() {
         }
 
         const url: string = window.location.origin
-                          + window.location.pathname + '?' + encodeURIComponent(textArea.value);
+                          + window.location.pathname + '?' + fixedEncodeURIComponent(textArea.value);
 
         table += '<p><a href="' + url + '">permalink</a></p>';
 

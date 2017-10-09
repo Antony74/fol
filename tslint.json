@@ -11,6 +11,7 @@
         "no-var-requires": false,
         "object-literal-sort-keys": false,
         "object-literal-shorthand": false,
+        "only-arrow-functions": false,
         "prefer-for-of": false,
         "quotemark": [true, "single"],
         "trailing-comma": [true, "never"]
