@@ -8,7 +8,7 @@ First the axioms and proof-steps are parsed with a [Jison](https://zaa.ch/jison/
 
     x * (y + z)
     
-becomes the following parse tree
+becomes the following syntax-tree
 
     {
         "text": "*",
@@ -37,4 +37,5 @@ becomes the following parse tree
         }
     }
 
-After that, each proof-step is searched for the presence of each axiom.
+After that, the syntax-trees for each proof-step are searched to see if any of the axioms can be fitted against it.
+

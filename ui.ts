@@ -34,30 +34,11 @@ function ready() {
 
     document.getElementById('axioms').innerHTML = '<table>' + rows + '</table>';
 
-    // https://codegolf.stackexchange.com/a/143928/71303
-    let arrProofStrings: string[] = [
-        '(-a)*(-a)',
-        '((-a)*(-a))+0',                                            // Axiom 2
-        '((-a)*(-a))+(((a*a)+(a*(-a)))+(-((a*a)+(a*(-a)))))',       // Axiom 3
-        '(((-a)*(-a))+((a*a)+(a*(-a))))+(-((a*a)+(a*(-a))))',       // Axiom 1
-        '(((a*a)+(a*(-a)))+((-a)*(-a)))+(-((a*a)+(a*(-a))))',       // Axiom 4
-        '((a*a)+((a*(-a))+((-a)*(-a))))+(-((a*a)+(a*(-a))))',       // Axiom 1
-        '((a*a)+((a+(-a))*(-a)))+(-((a*a)+(a*(-a))))',              // Axiom 9
-        '((a*a)+(0*(-a)))+(-((a*a)+(a*(-a))))',                     // Axiom 3
-        '((a*(a+0))+(0*(-a)))+(-((a*a)+(a*(-a))))',                 // Axiom 2
-        '((a*(a+(a+(-a))))+(0*(-a)))+(-((a*a)+(a*(-a))))',          // Axiom 3
-        '(((a*a)+(a*(a+(-a))))+(0*(-a)))+(-((a*a)+(a*(-a))))',      // Axiom 8
-        '((a*a)+((a*(a+(-a)))+(0*(-a))))+(-((a*a)+(a*(-a))))',      // Axiom 1
-        '(a*a)+(((a*(a+(-a)))+(0*(-a)))+(-((a*a)+(a*(-a)))))',      // Axiom 1
-        '(a*a)+((((a*a)+(a*(-a)))+(0*(-a)))+(-((a*a)+(a*(-a)))))',  // Axiom 8
-        '(a*a)+(((a*a)+((a*(-a))+(0*(-a))))+(-((a*a)+(a*(-a)))))',  // Axiom 1
-        '(a*a)+(((a*a)+((a+0)*(-a)))+(-((a*a)+(a*(-a)))))',         // Axiom 9
-        '(a*a)+(((a*a)+(a*(-a)))+(-((a*a)+(a*(-a)))))',             // Axiom 2
-        '(a*a)+0',                                                  // Axiom 3
-        'a*a'                                                       // Axiom 2
-    ];
+    const savedProof = decodeURIComponent(window.location.search.slice(1));
 
-    document.getElementById('proof').innerHTML = arrProofStrings.join('\n');
+    let arrProofStrings: string[] = savedProof.split('\n');
+
+    document.getElementById('proof').innerHTML = savedProof;
 
     const arrRingAxioms = arrRingAxiomStrings.map((sAxiom: string): Vertex => {
         const vertex = parser.parse(sAxiom);
@@ -143,6 +124,11 @@ function ready() {
             table = '<p><div class="redCell">X unable to validate proof (' + (arrProof.length - 1)
                   + ' steps)</div></p>' + table;
         }
+
+        const url: string = window.location.origin
+                          + window.location.pathname + '?' + encodeURIComponent(textArea.value);
+
+        table += '<p><a href="' + url + '">permalink</a></p>';
 
         document.getElementById('validation').innerHTML = table;
     };
