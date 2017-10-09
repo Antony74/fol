@@ -74,10 +74,25 @@ function ready() {
 
         arrProofStrings = textArea.value.split('\n');
 
-        const arrProof = arrProofStrings.map((sProofStep: string): Vertex => {
-            const vertex = parser.parse(sProofStep);
-            return vertex;
-        });
+        const arrProof: Vertex[] = [];
+
+        for (let n = 0; n < arrProofStrings.length; ++n) {
+            try {
+                const vertex = parser.parse(arrProofStrings[n]);
+                arrProof.push(vertex);
+            } catch (e) {
+                const arrMsg = e.message.split('\n');
+                if (arrMsg.length) {
+                    arrMsg[0] = 'Parse error on line ' + (n + 1);
+                }
+
+                const msg = '<p><div class="redCell">' + arrMsg.join('<br>') + '</div></p>';
+
+                document.getElementById('validation').innerHTML = msg;
+
+                return;
+            }
+        }
 
         let table = '<table>';
         let fullResult = true;
@@ -105,7 +120,7 @@ function ready() {
             if (result.result) {
                 table += '<td class="greenCell">&#10004;</td>';
             } else {
-                table += '<td class="redCell">X</td>';
+                table += '<td class="redCell">X</td><td colspan="5">Unable to find matching rule for this step</td>';
                 fullResult = false;
             }
 
