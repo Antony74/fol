@@ -53,7 +53,7 @@ function ready() {
 
         const textArea: HTMLTextAreaElement = document.getElementById('proof') as HTMLTextAreaElement;
 
-        arrProofStrings = textArea.value.split('\n');
+        arrProofStrings = textArea.value.split('\n').filter((s) => s.trim().length);
 
         const arrProof: Vertex[] = [];
 
