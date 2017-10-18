@@ -1,6 +1,7 @@
 
 import * as bnf from 'ebnf-parser';
 import {Jison} from 'jison';
+import {deflate, inflate} from 'pako';
 import {bidirectionalSearchAcrossRulesForMatches, Vertex} from './fol';
 
 const oReq = new XMLHttpRequest();
@@ -41,7 +42,16 @@ function ready() {
 
     document.getElementById('axioms').innerHTML = '<table>' + rows + '</table>';
 
-    const savedProof = decodeURIComponent(window.location.search.slice(1));
+    const origQuery = window.location.search.slice(1);
+    let savedProof = decodeURIComponent(decodeURIComponent(origQuery));
+
+    try {
+        const zipped = window.atob(savedProof);
+        const def = deflate;
+        savedProof = inflate(zipped, {to: 'string'});
+    } catch (e) {
+        // Hopefully this just means the proof in the url wasn't compressed
+    }
 
     let arrProofStrings: string[] = savedProof.split('\n');
 
@@ -132,8 +142,12 @@ function ready() {
                   + ' steps)</div></p>' + table;
         }
 
+        const deflated = deflate(textArea.value, {to: 'string'});
+        const b64 = window.btoa(deflated);
+        const query = fixedEncodeURIComponent(b64);
+
         const url: string = window.location.origin
-                          + window.location.pathname + '?' + fixedEncodeURIComponent(textArea.value);
+                          + window.location.pathname + '?' + fixedEncodeURIComponent(query);
 
         table += '<p><a href="' + url + '">permalink</a></p>';
 
