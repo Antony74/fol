@@ -34,7 +34,9 @@ function shallowEquals(v1: Vertex, v2: Vertex): boolean {
 
 function deepEquals(v1: Vertex, v2: Vertex): boolean {
 
-    if (!shallowEquals(v1, v2)) {
+    if (v1 === null && v2 === null) {
+        return true;
+    } else if (!shallowEquals(v1, v2)) {
         return false;
     } else if (v1.lhs && !deepEquals(v1.lhs, v2.lhs)) {
         return false;

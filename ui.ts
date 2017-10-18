@@ -109,25 +109,34 @@ function ready() {
 
             const exprBefore = arrProof[n - 1];
             const exprAfter = arrProof[n];
-            const result = bidirectionalSearchAcrossRulesForMatches(
-                                arrRingAxiomsLeft,
-                                arrRingAxiomsRight,
-                                exprBefore,
-                                exprAfter);
 
-            if (result.result) {
-                table += '<td class="greenCell">&#10004;</td>';
-            } else {
-                table += '<td class="redCell">X</td><td colspan="5">Unable to find matching rule for this step</td>';
+            try {
+                const result = bidirectionalSearchAcrossRulesForMatches(
+                                    arrRingAxiomsLeft,
+                                    arrRingAxiomsRight,
+                                    exprBefore,
+                                    exprAfter);
+
+                if (result.result) {
+                    table += '<td class="greenCell">&#10004;</td>';
+                } else {
+                    table += '<td class="redCell">X</td><td colspan="5">'
+                           + 'Unable to find matching rule for this step</td>';
+                    fullResult = false;
+                }
+
+                const arrContext = result.context.split(',');
+                while (arrContext.length < 8) {
+                    arrContext.push('&nbsp');
+                }
+
+                table += arrContext.map((s) => '<td>' + s + '</td>').join('');
+
+            } catch (e) {
+                table += '<td class="redCell">X</td><td colspan="5">'
+                + e.toString() + '</td>';
                 fullResult = false;
             }
-
-            const arrContext = result.context.split(',');
-            while (arrContext.length < 8) {
-                arrContext.push('&nbsp');
-            }
-
-            table += arrContext.map((s) => '<td>' + s + '</td>').join('');
 
             table += '</tr>';
         }
